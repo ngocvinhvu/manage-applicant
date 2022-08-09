@@ -1,0 +1,9 @@
+*.pyc
+venv
+.vscode/
+__pycache__
+endeavour.iml
+.idea
+.env
+celerybeat-schedule
+*.xlsx

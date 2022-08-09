@@ -1,0 +1,10 @@
+version: "1.0"
+services:
+  outcubator-test:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: outcubator-test
+    restart: always
+    ports:
+      - "5000:5000"
