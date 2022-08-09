@@ -3,9 +3,7 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql import expression
 from sqlalchemy.ext.compiler import compiles
 from models import db
-from sqlalchemy import (
-    DateTime, event, func
-)
+from sqlalchemy import DateTime, event, func
 
 
 def default_uuid():
@@ -16,7 +14,7 @@ class UtcNow(expression.FunctionElement):
     type = DateTime()
 
 
-@compiles(UtcNow, 'postgresql')
+@compiles(UtcNow, "postgresql")
 def get_now(element, compiler, **kw):
     return "TIMEZONE('utc', CURRENT_TIMESTAMP)"
 
@@ -28,7 +26,12 @@ def model_oncreate_listener(mapper, connection, instance):
 # CommonModel
 class CommonModel(db.Model):
     __abstract__ = True
-    id = db.Column(UUID(as_uuid=True), primary_key=True, default=default_uuid, server_default=func.uuid_generate_v4())
+    id = db.Column(
+        UUID(as_uuid=True),
+        primary_key=True,
+        default=default_uuid,
+        server_default=func.uuid_generate_v4(),
+    )
     created_dttm = db.Column(DateTime(), server_default=UtcNow())
 
     def create(self, resource):
@@ -47,12 +50,12 @@ class CommonModel(db.Model):
         """
         return db.session.commit()
 
-    def delete(self):
+    def delete(self, resource):
         """
         Delete resource
         """
-        self.deleted = True
+        db.session.delete(resource)
         return db.session.commit()
 
 
-event.listen(CommonModel, 'before_insert', model_oncreate_listener, propagate=True)
+event.listen(CommonModel, "before_insert", model_oncreate_listener, propagate=True)
