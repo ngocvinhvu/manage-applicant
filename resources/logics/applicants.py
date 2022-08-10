@@ -53,11 +53,15 @@ class ApplicantIdLogic(object):
         return jsonify(message)
 
     def put(self):
-        verified = VerifyRequest(request).verify_payload(ApplicantSchema)
+        verified = VerifyRequest(request).verify_payload(AppllicantPostSchema)
         if not verified["data"]:
             app.logger.debug("Error when load body request: %s" % verified["message"])
             abort(verified["code"], "%s" % verified["message"])
         for (k, v) in verified["data"].items():
+            if k == "email":
+                v = verify_email(v)
+            if k == "dob":
+                v = verify_dob(v)
             setattr(self.applicant, k, v)
         self.applicant.update()
 
@@ -66,6 +70,6 @@ class ApplicantIdLogic(object):
         return jsonify(message)
 
     def delete(self):
-        self.applicant.delete()
+        self.applicant.delete(self.applicant)
         app.logger.info(f"Deleted applicant {self.applicant_id} successful")
         return jsonify({"message": f"Delete applicant {self.applicant_id} successful"})

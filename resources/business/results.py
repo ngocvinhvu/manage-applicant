@@ -5,7 +5,7 @@ from common import http_status_code
 from resources.logics.results import ResultsLogic
 
 
-class ApplicantResource(Resource):
+class ResultResource(Resource):
 
     # Creating a new applicant
     def post(self, *args, **kwargs):

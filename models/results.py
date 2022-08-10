@@ -14,8 +14,8 @@ ENV = os.environ.get("ENV", "development")
 CONF = config[ENV]
 
 
-def model_onupdate_listener(mapper, connection, instance):
-    instance.processed_dttm = instance.created_at
+def model_oncreate_listener(mapper, connection, instance):
+    instance.processed_dttm = UtcNow()
 
 
 def generate_key(length):
@@ -38,12 +38,14 @@ class Results(CommonModel):
     applicant_id = db.Column(
         UUID(as_uuid=True), db.ForeignKey("applicants.id"), nullable=False
     )
+    client_key = db.Column(db.String)
     applicant = relationship("Applicants")
     processed_dttm = db.Column(DateTime(), server_default=UtcNow())
 
-    def __init__(self, applicant_id, status):
+    def __init__(self, applicant_id, status, client_key):
         self.applicant_id = applicant_id
         self.status = status
+        self.client_key = client_key
 
 
-event.listen(CommonModel, "before_update", model_onupdate_listener, propagate=True)
+event.listen(Results, "before_insert", model_oncreate_listener, propagate=True)

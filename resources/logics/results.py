@@ -25,11 +25,11 @@ class ResultsLogic(object):
 
     def post(self):
         payload = {}
-        payload.applicant_id = self.applicant_id
-        payload.client_id = generate_key(128)
+        payload["applicant_id"] = self.applicant_id
+        payload["client_key"] = generate_key(128)
         dob = self.applicant.dob
         status = check_dob_odd_or_even(dob)
-        payload.status = status
+        payload["status"] = status
         results = Results(**payload)
         results.create(results)
         app.logger.info(f"Check applicant {self.applicant_id} status {status}")

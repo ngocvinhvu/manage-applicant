@@ -41,10 +41,10 @@ class ApplicantIdResource(Resource):
         return applicant_logic.get()
 
     # Updating an applicant
-    def patch(self, applicant_id, *args, **kwargs):
+    def put(self, applicant_id, *args, **kwargs):
         app.logger.info("Update an applicant: %s" % applicant_id)
         applicant_id_logic = ApplicantIdLogic(applicant_id)
-        return applicant_id_logic.patch()
+        return applicant_id_logic.put()
 
     # Deleting an appicant
     def delete(self, applicant_id, *args, **kwargs):
