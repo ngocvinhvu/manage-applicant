@@ -8,6 +8,7 @@ from flask import Flask
 from flask_migrate import Migrate
 from flask_script import Manager
 from raven.contrib.flask import Sentry
+from flasgger import Swagger
 
 from resources.business.healcheck import HealthCheckResource
 from resources.business.applicants import ApplicantResource, ApplicantIdResource
@@ -26,7 +27,7 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object(CONF)
     app.config.from_pyfile("config.py")
-    app.config["SQLALCHEMY_POOL_SIZE"] = 20
+    app.config["SQLALCHEMY_POOL_SIZE"] = CONF.SQLALCHEMY_POOL_SIZE
 
     if CONF.ENABLE_CORS:
         CORS(
@@ -45,6 +46,7 @@ def create_app():
     migrate.init_app(app, db)
     sentry.init_app(app, dsn=CONF.SENTRY_DSN, logging=True, level=logging.ERROR)
     api = Api(app)
+    swagger = Swagger(app)
 
     api.add_resource(HealthCheckResource, "/healthcheck")
     api.add_resource(ApplicantResource, "/applicants")
