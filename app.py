@@ -26,6 +26,7 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object(CONF)
     app.config.from_pyfile("config.py")
+    app.config['SQLALCHEMY_POOL_SIZE'] = 20
 
     if CONF.ENABLE_CORS:
         CORS(
