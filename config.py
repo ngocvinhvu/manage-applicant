@@ -14,6 +14,8 @@ def _get_env_or_default(var_name, default_val):
 
 
 class BaseConfig(object):
+    # API
+    API_URL = _get_env_or_default("API_URL", "http://localhost:5000")
     # LOG
     LANGUAGES = ["en", "vi"]
     DEBUG = _get_env_or_default("DEBUG", False)

@@ -42,8 +42,8 @@ def create_app():
 
     db.init_app(app)
     migrate.init_app(app, db)
-    api = Api(app)
     sentry.init_app(app, dsn=CONF.SENTRY_DSN, logging=True, level=logging.ERROR)
+    api = Api(app)
 
     api.add_resource(HealthCheckResource, "/healthcheck")
     api.add_resource(ApplicantResource, "/applicants")

@@ -1,5 +1,4 @@
 import os
-import subprocess
 
 from app import create_app
 from flask_script import Manager
@@ -9,6 +8,8 @@ from config import config
 
 env = os.environ.get("ENV", "development")
 CONF = config[env]
+
+
 app = create_app()
 app.app_context().push()
 
