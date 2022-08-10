@@ -3,32 +3,36 @@ from common import http_status_code
 from exceptions import ApplicantNotFoundException
 from flask import abort, request, jsonify
 from flask import current_app as app
-from models.applicants import Applicants, ApplicantService
+from models.applicants import Applicants, ApplicantService, verify_dob, verify_email
 from resources.verify_request import VerifyRequest
-from schema.applicants import ApplicantSchema, ApplicantOut
+from schema.applicants import ApplicantSchema, AppllicantPostSchema
 
 
 class ApplicantsLogic(object):
-
     def __init__(self, items_per_page=None, page=None):
-        self.applicants, self.count = ApplicantService.find_all_applicants(items_per_page, page)
+        self.applicants, self.count = ApplicantService.find_all_applicants(
+            items_per_page, page
+        )
 
     def get(self):
         message = []
         for applicant in self.applicants:
-            msg, _ = ApplicantOut().dump(applicant)
+            msg, _ = ApplicantSchema().dump(applicant)
             message.append(msg)
-        return jsonify({'applicants': message, 'total': self.count})
+        return jsonify({"applicants": message, "total": self.count})
 
     def post(self):
-        verified = VerifyRequest(request).verify_payload(ApplicantSchema)
-        if not verified['data']:
-            app.logger.debug('Error when load body request: %s' % verified['message'])
-            abort(verified['code'], "%s" % verified['message'])
-        payload = verified['data']
+        verified = VerifyRequest(request).verify_payload(AppllicantPostSchema)
+        if not verified["data"]:
+            app.logger.debug("Error when load body request: %s" % verified["message"])
+            abort(verified["code"], "%s" % verified["message"])
+        payload = verified["data"]
+        dob = verify_dob(payload.get("dob"))
+        email = verify_email(payload.get("email"))
+        payload.update({"dob": dob, "email": email})
         applicant = Applicants(**payload)
         applicant.create(applicant)
-        app.logger.info(f'Created an new applicant {applicant.id} successfully')
+        app.logger.info(f"Created an new applicant {applicant.id} successfully")
         message, _ = ApplicantSchema().dump(applicant)
         resp = jsonify(message)
         resp.status_code = http_status_code.HTTP_201_CREATED
@@ -36,7 +40,6 @@ class ApplicantsLogic(object):
 
 
 class ApplicantIdLogic(object):
-
     def __init__(self, applicant_id):
         self.applicant_id = applicant_id
         try:
@@ -49,22 +52,20 @@ class ApplicantIdLogic(object):
         message, _ = ApplicantSchema().dump(self.applicant)
         return jsonify(message)
 
-    def patch(self):
+    def put(self):
         verified = VerifyRequest(request).verify_payload(ApplicantSchema)
-        if not verified['data']:
-            app.logger.debug('Error when load body request: %s' % verified['message'])
-            abort(verified['code'], "%s" % verified['message'])
-        for (k, v) in verified['data'].items():
-            if k == 'name' and not v:
-                continue
+        if not verified["data"]:
+            app.logger.debug("Error when load body request: %s" % verified["message"])
+            abort(verified["code"], "%s" % verified["message"])
+        for (k, v) in verified["data"].items():
             setattr(self.applicant, k, v)
         self.applicant.update()
 
-        app.logger.info('Update applicant %s successful' % self.applicant_id)
+        app.logger.info("Update applicant %s successful" % self.applicant_id)
         message, errors = ApplicantSchema().dump(self.applicant)
         return jsonify(message)
 
     def delete(self):
         self.applicant.delete()
-        app.logger.info(f'Deleted applicant {self.applicant_id} successful')
-        return jsonify({'message': f'Delete applicant {self.applicant_id} successful'})
+        app.logger.info(f"Deleted applicant {self.applicant_id} successful")
+        return jsonify({"message": f"Delete applicant {self.applicant_id} successful"})

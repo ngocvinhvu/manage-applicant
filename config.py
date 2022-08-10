@@ -18,7 +18,7 @@ class BaseConfig(object):
     LANGUAGES = ["en", "vi"]
     DEBUG = _get_env_or_default("DEBUG", False)
     LOG_LEVEL = _get_env_or_default("LOG_LEVEL", "debug")
-    LOG_FILE = _get_env_or_default("LOG_FILE", "/tmp/backup-api.log")
+    LOG_FILE = _get_env_or_default("LOG_FILE", "/tmp/applicant-api.log")
     LOG_OPTION = _get_env_or_default("LOG_OPTION", "console")
 
     # Database

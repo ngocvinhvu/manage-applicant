@@ -43,5 +43,5 @@ def create_app():
     api.add_resource(HealthCheckResource, "/healthcheck")
     api.add_resource(ApplicantResource, "/applicants")
     api.add_resource(ApplicantIdResource, "/applicants/<applicant_id>")
-    
+
     return app

@@ -1,15 +1,13 @@
-import os
 from enum import Enum, unique
-from config import config
+from flask import abort
+from email_validator import validate_email, EmailNotValidError
+from datetime import datetime
 from sqlalchemy import desc, DateTime
 from sqlalchemy.dialects.postgresql import ENUM as pgEnum
+from common import http_status_code
 from models import db, is_valid_uuid
 from models.common_model import CommonModel
 from exceptions import ApplicantNotFoundException
-
-
-ENV = os.environ.get("ENV", "development")
-CONF = config[ENV]
 
 
 @unique
@@ -30,6 +28,22 @@ class Status(Enum):
     failed = "failed"
 
 
+def verify_dob(dob):
+    try:
+        date_of_birth = datetime.strptime(dob, "%Y/%m/%d")
+        return date_of_birth
+    except ValueError:
+        abort(http_status_code.HTTP_400_BAD_REQUEST, "Date of birt is invalid")
+
+
+def verify_email(email):
+    try:
+        email = validate_email(email).email
+        return email
+    except EmailNotValidError as e:
+        abort(http_status_code.HTTP_400_BAD_REQUEST, str(e))
+
+
 class Applicants(CommonModel):
     __tablename__ = "applicants"
 
@@ -39,13 +53,12 @@ class Applicants(CommonModel):
     country = db.Column(pgEnum(Countries))
     status = db.Column(pgEnum(Status), default=Status.pending)
 
-    def __init__(self, name, email, dob, country, status):
+    def __init__(self, name, email, dob, country):
         self.name = name
         self.email = email
         self.dob = dob
-        self.status = status
         self.country = country
-        self.status = status
+        self.status = Status.pending
 
 
 class ApplicantService(object):
