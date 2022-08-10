@@ -39,22 +39,3 @@ class VerifyRequest(object):
             }
 
         return {"code": None, "message": None, "data": data}
-
-    def verify_attributes_item(self, schema):
-        body = self.request.json
-        attributes = body["attributes"]
-        data, errors = schema().load(attributes)
-        if errors:
-            return {
-                "code": http_status_code.HTTP_400_BAD_REQUEST,
-                "message": errors,
-                "data": None,
-            }
-        if not data:
-            msg = "The payload invalid format"
-            return {
-                "code": http_status_code.HTTP_400_BAD_REQUEST,
-                "message": msg,
-                "data": None,
-            }
-        return {"code": None, "message": None, "data": data}
