@@ -1,4 +1,5 @@
 import os
+import logging
 from config import config
 
 from flask_cors import CORS
@@ -6,6 +7,7 @@ from flask_restful import Api
 from flask import Flask
 from flask_migrate import Migrate
 from flask_script import Manager
+from raven.contrib.flask import Sentry
 
 from resources.business.healcheck import HealthCheckResource
 from resources.business.applicants import ApplicantResource, ApplicantIdResource
@@ -17,6 +19,7 @@ CONF = config[ENV]
 
 migrate = Migrate()
 manager = Manager()
+sentry = Sentry()
 
 
 def create_app():
@@ -40,6 +43,7 @@ def create_app():
     db.init_app(app)
     migrate.init_app(app, db)
     api = Api(app)
+    sentry.init_app(app, dsn=CONF.SENTRY_DSN, logging=True, level=logging.ERROR)
 
     api.add_resource(HealthCheckResource, "/healthcheck")
     api.add_resource(ApplicantResource, "/applicants")

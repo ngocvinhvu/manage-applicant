@@ -25,16 +25,18 @@ def generate_key(length):
 
 def check_dob_odd_or_even(dob):
     date = dob.strftime("%d")
+    print(date)
     if int(date) % 2 == 0:
         status = Status.processed
-    status = Status.failed
+    else:
+        status = Status.failed
     return status
 
 
 class Results(CommonModel):
     __tablename__ = "results"
 
-    status = db.Column(pgEnum(Status), default=Status.pending)
+    applicant_status = db.Column(pgEnum(Status), default=Status.pending)
     applicant_id = db.Column(
         UUID(as_uuid=True), db.ForeignKey("applicants.id"), nullable=False
     )
@@ -42,9 +44,9 @@ class Results(CommonModel):
     applicant = relationship("Applicants")
     processed_dttm = db.Column(DateTime(), server_default=UtcNow())
 
-    def __init__(self, applicant_id, status, client_key):
+    def __init__(self, applicant_id, applicant_status, client_key):
         self.applicant_id = applicant_id
-        self.status = status
+        self.applicant_status = applicant_status
         self.client_key = client_key
 
 

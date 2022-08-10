@@ -24,11 +24,14 @@ class BaseConfig(object):
     # Database
     SQLALCHEMY_DATABASE_URI = _get_env_or_default(
         "SQLALCHEMY_DATABASE_URI",
-        "postgresql+psycopg2://postgres:Vcc123**@103.107.182.123:5432/applicant_manage",
+        "",
     )
     SQLALCHEMY_TRACK_MODIFICATIONS = _get_env_or_default(
         "SQLALCHEMY_TRACK_MODIFICATIONS", False
     )
+
+    # Sentry
+    SENTRY_DSN = _get_env_or_default("SENTRY_DSN", "")
 
     # CORS
     ENABLE_CORS = (

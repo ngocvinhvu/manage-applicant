@@ -33,7 +33,10 @@ def verify_dob(dob):
         date_of_birth = datetime.strptime(dob, "%Y/%m/%d")
         return date_of_birth
     except ValueError:
-        abort(http_status_code.HTTP_400_BAD_REQUEST, "Date of birt is invalid")
+        abort(
+            http_status_code.HTTP_400_BAD_REQUEST,
+            "Date of birt is invalid must id Year/month/day",
+        )
 
 
 def verify_email(email):

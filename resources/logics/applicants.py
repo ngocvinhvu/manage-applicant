@@ -2,10 +2,10 @@ import os
 from common import http_status_code
 from exceptions import ApplicantNotFoundException
 from flask import abort, request, jsonify
-from flask import current_app as app
 from models.applicants import Applicants, ApplicantService, verify_dob, verify_email
 from resources.verify_request import VerifyRequest
 from schema.applicants import ApplicantSchema, AppllicantPostSchema
+from common import LOG
 
 
 class ApplicantsLogic(object):
@@ -24,7 +24,7 @@ class ApplicantsLogic(object):
     def post(self):
         verified = VerifyRequest(request).verify_payload(AppllicantPostSchema)
         if not verified["data"]:
-            app.logger.debug("Error when load body request: %s" % verified["message"])
+            LOG.debug("Error when load body request: %s" % verified["message"])
             abort(verified["code"], "%s" % verified["message"])
         payload = verified["data"]
         dob = verify_dob(payload.get("dob"))
@@ -32,7 +32,7 @@ class ApplicantsLogic(object):
         payload.update({"dob": dob, "email": email})
         applicant = Applicants(**payload)
         applicant.create(applicant)
-        app.logger.info(f"Created an new applicant {applicant.id} successfully")
+        LOG.info(f"Created a new applicant {applicant.id} successfully")
         message, _ = ApplicantSchema().dump(applicant)
         resp = jsonify(message)
         resp.status_code = http_status_code.HTTP_201_CREATED
@@ -55,7 +55,7 @@ class ApplicantIdLogic(object):
     def put(self):
         verified = VerifyRequest(request).verify_payload(AppllicantPostSchema)
         if not verified["data"]:
-            app.logger.debug("Error when load body request: %s" % verified["message"])
+            LOG.debug("Error when load body request: %s" % verified["message"])
             abort(verified["code"], "%s" % verified["message"])
         for (k, v) in verified["data"].items():
             if k == "email":
@@ -65,11 +65,11 @@ class ApplicantIdLogic(object):
             setattr(self.applicant, k, v)
         self.applicant.update()
 
-        app.logger.info("Update applicant %s successful" % self.applicant_id)
+        LOG.info("Update applicant %s successful" % self.applicant_id)
         message, errors = ApplicantSchema().dump(self.applicant)
         return jsonify(message)
 
     def delete(self):
         self.applicant.delete(self.applicant)
-        app.logger.info(f"Deleted applicant {self.applicant_id} successful")
+        LOG.info(f"Deleted applicant {self.applicant_id} successful")
         return jsonify({"message": f"Delete applicant {self.applicant_id} successful"})
