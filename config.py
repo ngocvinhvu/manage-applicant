@@ -31,6 +31,9 @@ class BaseConfig(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = _get_env_or_default(
         "SQLALCHEMY_TRACK_MODIFICATIONS", False
     )
+    SQLALCHEMY_POOL_SIZE = _get_env_or_default(
+        "SQLALCHEMY_POOL_SIZE", 50
+    )
 
     # Sentry
     SENTRY_DSN = _get_env_or_default("SENTRY_DSN", "")
