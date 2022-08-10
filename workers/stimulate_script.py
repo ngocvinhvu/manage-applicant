@@ -60,7 +60,7 @@ async def main():
     conn = aiohttp.TCPConnector(limit=None, ttl_dns_cache=300)
     session = aiohttp.ClientSession(connector=conn)
     url = CONF.API_URL + "/applicants"
-    conc_req = 100
+    conc_req = 10
     await gather_with_concurrency(
         conc_req,
         *[
