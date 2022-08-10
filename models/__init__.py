@@ -36,4 +36,4 @@ def is_valid_uuid(uuid_to_test, version=4):
     return True
 
 
-from models import common_model, applicants
+from models import common_model, applicants, results

@@ -2,7 +2,6 @@ import os
 from enum import Enum, unique
 from config import config
 from sqlalchemy import desc, DateTime
-from sqlalchemy.sql import func
 from sqlalchemy.dialects.postgresql import ENUM as pgEnum
 from models import db, is_valid_uuid
 from models.common_model import CommonModel
@@ -24,20 +23,27 @@ class Countries(Enum):
     MALAYSIA = "MALAYSIA"
 
 
-class Applicant(CommonModel):
-    __tablename__ = "applicant"
+@unique
+class Status(Enum):
+    processed = "processed"
+    pending = "pending"
+    failed = "failed"
+
+
+class Applicants(CommonModel):
+    __tablename__ = "applicants"
 
     name = db.Column(db.String)
     email = db.Column(db.String)
-    dob = db.Column(DateTime(timezone=True), server_default=func.now())
+    dob = db.Column(DateTime)
     country = db.Column(pgEnum(Countries))
-    status = db.Column(db.String, default="pending")
+    status = db.Column(pgEnum(Status), default=Status.pending)
 
     def __init__(self, name, email, dob, country, status):
         self.name = name
         self.email = email
         self.dob = dob
-        self.status = "pending"
+        self.status = status
         self.country = country
         self.status = status
 
@@ -45,25 +51,25 @@ class Applicant(CommonModel):
 class ApplicantService(object):
     @classmethod
     def find_all_applicants(cls, items_per_page=None, page=None):
-        filtered_machines = Applicant.query.order_by(desc(Applicant.created_dttm))
+        filtered_applicants = Applicants.query.order_by(desc(Applicants.created_dttm))
         if items_per_page and page:
-            machines = (
-                filtered_machines.offset(items_per_page * (page - 1))
+            applicants = (
+                filtered_applicants.offset(items_per_page * (page - 1))
                 .limit(items_per_page)
                 .all()
             )
         else:
-            machines = filtered_machines.all()
-        return machines, filtered_machines.count()
+            applicants = filtered_applicants.all()
+        return applicants, filtered_applicants.count()
 
     @classmethod
     def find_by_id(cls, applicant_id):
         if not is_valid_uuid(applicant_id):
             raise ApplicantNotFoundException()
 
-        applicant = Applicant.query.filter(Applicant.id == applicant_id).first()
+        applicant = Applicants.query.filter(Applicants.id == applicant_id).first()
         if not applicant:
             raise ApplicantNotFoundException(
-                message=f"Machine {applicant_id} could not be found "
+                message=f"Applicant {applicant_id} could not be found "
             )
         return applicant

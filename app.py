@@ -8,6 +8,7 @@ from flask_migrate import Migrate
 from flask_script import Manager
 
 from resources.business.healcheck import HealthCheckResource
+from resources.business.applicants import ApplicantResource, ApplicantIdResource
 
 
 ENV = os.environ.get("ENV", "development")
@@ -40,4 +41,7 @@ def create_app():
     api = Api(app)
 
     api.add_resource(HealthCheckResource, "/healthcheck")
+    api.add_resource(ApplicantResource, "/applicants")
+    api.add_resource(ApplicantIdResource, "/applicants/<applicant_id>")
+    
     return app
