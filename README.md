@@ -11,7 +11,7 @@
 ```
 # Example
 SQLALCHEMY_DATABASE_URI=postgresql+psycopg2://postgres:password**@localhost:5432/applicant_manage
-SENTRY_DSN=https://b7eec1c2f1e64f3e8e2c01eb6caac83c:09892e1463df44a589d876857ba03fab@sentry.vn/123
+SENTRY_DSN=https://username:password@sentry.vn/123
 API_URL=http://localhost:5000
 ```
 ## Migrate database
