@@ -23,9 +23,8 @@ def generate_key(length):
     return "".join((random.choice(letters_and_digits) for i in range(length)))
 
 
-def check_dob_odd_or_even(dob):
+def check_approve(dob):
     date = dob.strftime("%d")
-    print(date)
     if int(date) % 2 == 0:
         status = Status.processed
     else:
