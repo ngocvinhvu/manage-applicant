@@ -60,6 +60,12 @@ class ApplicantResource(Resource):
                 - email
                 - dob
                 - country
+                - identifify_number
+                - phone_number
+                - permanent_residence
+                - nationality
+                - new_applicant
+                - place
               properties:
                 name:
                   type: string
@@ -68,6 +74,18 @@ class ApplicantResource(Resource):
                 dob:
                   type: string
                 country:
+                  type: string
+                identifify_number:
+                  type: integer
+                phone_number:
+                  type: integer
+                permanent_residence:
+                  type: string
+                nationality:
+                  type: string
+                new_applicant:
+                  type: boolean
+                place:
                   type: string
         responses:
           201:
@@ -123,6 +141,12 @@ class ApplicantIdResource(Resource):
                 - email
                 - dob
                 - country
+                - identifify_number
+                - phone_number
+                - permanent_residence
+                - nationality
+                - new_applicant
+                - place
               properties:
                 name:
                   type: string
@@ -131,6 +155,18 @@ class ApplicantIdResource(Resource):
                 dob:
                   type: string
                 country:
+                  type: string
+                identifify_number:
+                  type: integer
+                phone_number:
+                  type: integer
+                permanent_residence:
+                  type: string
+                nationality:
+                  type: string
+                new_applicant:
+                  type: boolean
+                place:
                   type: string
         responses:
           204:

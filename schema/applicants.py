@@ -9,9 +9,15 @@ class ApplicantSchema(Schema):
     name = fields.String()
     email = fields.String()
     dob = fields.DateTime()
-    country = EnumField(Countries)
+    country = fields.String()
     status = EnumField(Status)
     created_dttm = fields.DateTime()
+    identifify_number = fields.Integer()
+    phone_number = fields.Integer()
+    permanent_residence = fields.String()
+    nationality = EnumField(Countries)
+    new_applicant = fields.Boolean()
+    place = fields.String()
 
 
 class AppllicantPostSchema(ApplicantSchema):
