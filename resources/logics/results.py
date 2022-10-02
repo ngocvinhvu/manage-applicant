@@ -4,7 +4,7 @@ from exceptions import ApplicantNotFoundException
 from flask import abort, request, jsonify
 from flask import current_app as app
 from models.applicants import ApplicantService
-from models.results import Results, generate_key, check_dob_odd_or_even
+from models.results import Results, generate_key, check_approve
 from resources.verify_request import VerifyRequest
 from schema.results import ProcessResults
 from common import LOG
@@ -28,7 +28,7 @@ class ResultsLogic(object):
         payload["applicant_id"] = self.applicant_id
         payload["client_key"] = generate_key(128)
         dob = self.applicant.dob
-        status = check_dob_odd_or_even(dob)
+        status = check_approve(dob)
         payload["applicant_status"] = status
         results = Results(**payload)
         results.create(results)

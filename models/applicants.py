@@ -1,5 +1,4 @@
 from enum import Enum, unique
-from tkinter.tix import INTEGER
 from flask import abort
 from email_validator import validate_email, EmailNotValidError
 from datetime import datetime
@@ -52,7 +51,7 @@ class Applicants(CommonModel):
     __tablename__ = "applicants"
 
     name = db.Column(db.String)
-    identifify_number = db.Column(db.Biginteger)
+    identifify_number = db.Column(db.BigInteger)
     phone_number = db.Column(db.BigInteger)
     email = db.Column(db.String)
     dob = db.Column(DateTime)
@@ -60,14 +59,20 @@ class Applicants(CommonModel):
     permanent_residence = db.Column(db.String)
     nationality = db.Column(pgEnum(Countries))
     status = db.Column(pgEnum(Status), default=Status.pending)
+    new_applicant = db.Column(db.Boolean)
     place = db.Column(db.String)
 
-    def __init__(self, name, email, dob, country):
+    def __init__(
+        self, name, email, dob, country, permanent_residence, nationality, new_applicant
+    ):
         self.name = name
         self.email = email
         self.dob = dob
         self.country = country
         self.status = Status.pending
+        self.permanent_residence = permanent_residence
+        self.nationality = nationality
+        self.new_applicant = new_applicant
 
 
 class ApplicantService(object):
