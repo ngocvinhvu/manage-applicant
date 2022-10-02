@@ -1,4 +1,5 @@
 import os
+import random
 from faker import Faker
 from datetime import datetime
 from config import config
@@ -21,6 +22,8 @@ def make_list_dummy_applicants(num):
         dob = fake.date_between(d1, d2)
         # create applicant's name
         name = fake.name()
+        identify_number = random.randrange(111111111, 999999999)
+        phone_number = random.randrange(111111111, 999999999)
         # Create email
         email = fake.ascii_email()
         applicant = {}
@@ -29,7 +32,13 @@ def make_list_dummy_applicants(num):
                 "name": name,
                 "email": email,
                 "dob": str(dob).replace("-", "/"),
-                "country": "VIETNAM",
+                "country": "Hanoi",
+                "identify_number": identify_number,
+                "phone_number": f"+84{phone_number}",
+                "permanent_residence": "Hanoi",
+                "nationality": "VIETNAM",
+                "new_applicant": False,
+                "place": "Hanoi"
             }
         )
         applicants.append(applicant)

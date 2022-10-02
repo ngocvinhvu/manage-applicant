@@ -60,7 +60,7 @@ class ApplicantResource(Resource):
                 - email
                 - dob
                 - country
-                - identifify_number
+                - identify_number
                 - phone_number
                 - permanent_residence
                 - nationality
@@ -75,7 +75,7 @@ class ApplicantResource(Resource):
                   type: string
                 country:
                   type: string
-                identifify_number:
+                identify_number:
                   type: integer
                 phone_number:
                   type: integer
@@ -141,7 +141,7 @@ class ApplicantIdResource(Resource):
                 - email
                 - dob
                 - country
-                - identifify_number
+                - identify_number
                 - phone_number
                 - permanent_residence
                 - nationality
@@ -156,7 +156,7 @@ class ApplicantIdResource(Resource):
                   type: string
                 country:
                   type: string
-                identifify_number:
+                identify_number:
                   type: integer
                 phone_number:
                   type: integer

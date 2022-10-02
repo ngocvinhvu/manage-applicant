@@ -51,7 +51,7 @@ class Applicants(CommonModel):
     __tablename__ = "applicants"
 
     name = db.Column(db.String)
-    identifify_number = db.Column(db.BigInteger)
+    identify_number = db.Column(db.BigInteger)
     phone_number = db.Column(db.BigInteger)
     email = db.Column(db.String)
     dob = db.Column(DateTime)
@@ -63,7 +63,7 @@ class Applicants(CommonModel):
     place = db.Column(db.String)
 
     def __init__(
-        self, name, email, dob, country, permanent_residence, nationality, new_applicant
+        self, name, email, dob, country, permanent_residence, nationality, new_applicant, identify_number, phone_number, place
     ):
         self.name = name
         self.email = email
@@ -73,7 +73,9 @@ class Applicants(CommonModel):
         self.permanent_residence = permanent_residence
         self.nationality = nationality
         self.new_applicant = new_applicant
-
+        self.identify_number = identify_number
+        self.phone_number = phone_number
+        self.place = place
 
 class ApplicantService(object):
     @classmethod

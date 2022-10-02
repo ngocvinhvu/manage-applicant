@@ -12,7 +12,7 @@ class ApplicantSchema(Schema):
     country = fields.String()
     status = EnumField(Status)
     created_dttm = fields.DateTime()
-    identifify_number = fields.Integer()
+    identify_number = fields.Integer()
     phone_number = fields.Integer()
     permanent_residence = fields.String()
     nationality = EnumField(Countries)

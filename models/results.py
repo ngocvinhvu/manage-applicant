@@ -8,6 +8,7 @@ from models import db
 from models.common_model import CommonModel
 from models.applicants import Status
 from models.common_model import UtcNow
+from datetime import date
 
 
 ENV = os.environ.get("ENV", "development")
@@ -24,11 +25,22 @@ def generate_key(length):
 
 
 def check_approve(dob):
-    date = dob.strftime("%d")
-    if int(date) % 2 == 0:
-        status = Status.processed
-    else:
+    year = dob.strftime("%Y")
+    month = dob.strftime("%m")
+    day = dob.strftime("%d")
+    curent_date = str(date.today())
+    curent_year = curent_date.split("-")[0]
+    curent_month = curent_date.split("-")[1]
+    curent_day = curent_date.split("-")[2]
+    if int(curent_year) - int(year) < 15:
         status = Status.failed
+    elif int(curent_year) - int(year) == 15 and int(curent_month) < int(month):
+        status = Status.failed
+    elif int(curent_year) - int(year) == 15 and int(curent_month) == int(month) and int(curent_day) < int(day):
+        status = Status.failed
+    else:
+        status = Status.processed
+
     return status
 
 
