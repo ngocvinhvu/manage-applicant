@@ -1,3 +1,4 @@
+from dbm import dumb
 from marshmallow import Schema, fields
 from marshmallow_enum import EnumField
 
@@ -10,8 +11,8 @@ class ApplicantSchema(Schema):
     email = fields.String()
     dob = fields.DateTime()
     country = fields.String()
-    status = EnumField(Status)
-    created_dttm = fields.DateTime()
+    status = EnumField(Status, dumb_only = True)
+    created_dttm = fields.DateTime(dump_only=True)
     identify_number = fields.Integer()
     phone_number = fields.Integer()
     permanent_residence = fields.String()

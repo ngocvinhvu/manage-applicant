@@ -1,10 +1,12 @@
 import os
+import xlsxwriter
 from common import http_status_code
 from exceptions import ApplicantNotFoundException
-from flask import abort, request, jsonify
+from flask import abort, request, jsonify, send_file
 from models.applicants import Applicants, ApplicantService, verify_dob, verify_email
 from resources.verify_request import VerifyRequest
 from schema.applicants import ApplicantSchema, AppllicantPostSchema
+from libs.libs import Generate
 from common import LOG
 
 
@@ -37,6 +39,12 @@ class ApplicantsLogic(object):
         resp = jsonify(message)
         resp.status_code = http_status_code.HTTP_201_CREATED
         return resp
+
+    def generate(self):
+        file_name = 'Applicants-Infomation.xlsx'
+        _ = Generate(xlsxwriter).generate(file_name, self.applicants)
+        LOG.info("Writing successfully infos")
+        return send_file(f"{os.getcwd()}/{file_name}", as_attachment=True)
 
 
 class ApplicantIdLogic(object):
@@ -73,3 +81,10 @@ class ApplicantIdLogic(object):
         self.applicant.delete(self.applicant)
         LOG.info(f"Deleted applicant {self.applicant_id} successful")
         return jsonify({"message": f"Delete applicant {self.applicant_id} successful"})
+
+    def generate(self):
+        file_name = f"Applicant-Infomation-{str(self.applicant_id)}.xlsx"
+        applicant = [self.applicant]
+        _ = Generate(xlsxwriter).generate(file_name, applicant)
+        LOG.info("Writing successfully infos")
+        return send_file(f"{os.getcwd()}/{file_name}", as_attachment=True)

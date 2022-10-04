@@ -69,7 +69,6 @@ class Applicants(CommonModel):
         self.email = email
         self.dob = dob
         self.country = country
-        self.status = Status.pending
         self.permanent_residence = permanent_residence
         self.nationality = nationality
         self.new_applicant = new_applicant

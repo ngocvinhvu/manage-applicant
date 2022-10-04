@@ -11,7 +11,7 @@ from raven.contrib.flask import Sentry
 from flasgger import Swagger
 
 from resources.business.healcheck import HealthCheckResource
-from resources.business.applicants import ApplicantResource, ApplicantIdResource
+from resources.business.applicants import ApplicantResource, ApplicantIdResource, GenerateInfosResource, GenerateInfoResource
 from resources.business.results import ResultResource
 
 
@@ -48,9 +48,11 @@ def create_app():
     api = Api(app)
     swagger = Swagger(app)
 
-    api.add_resource(HealthCheckResource, "/healthcheck")
     api.add_resource(ApplicantResource, "/applicants")
     api.add_resource(ApplicantIdResource, "/applicants/<applicant_id>")
+    api.add_resource(GenerateInfosResource, "/applicants/generate")
+    api.add_resource(GenerateInfoResource, "/applicants/<applicant_id>/generate")
     api.add_resource(ResultResource, "/process")
+    api.add_resource(HealthCheckResource, "/healthcheck")
 
     return app

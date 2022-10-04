@@ -96,6 +96,20 @@ class ApplicantResource(Resource):
         return applicant_logic.post()
 
 
+class GenerateInfosResource(Resource):
+    def get(self, *args, **kwargs):
+      """
+      Generate the infomation of all applicants
+      ---
+      responses:
+        200:
+          description: A list of applicants
+      """
+      LOG.info("Request create an applicant")
+      applicant_logic = ApplicantsLogic()
+      return applicant_logic.generate()
+  
+
 class ApplicantIdResource(Resource):
 
     # Getting an applicant
@@ -194,3 +208,17 @@ class ApplicantIdResource(Resource):
         LOG.info("Delete an applicant: %s" % applicant_id)
         applicant_logic = ApplicantIdLogic(applicant_id)
         return applicant_logic.delete()
+
+
+class GenerateInfoResource(Resource):
+    def get(self, applicant_id):
+        """
+        Generate info of this applicant
+        ---
+        responses:
+          200:
+            description: Generate an applicants
+        """
+        LOG.info("Get an applicant info: %s" % applicant_id)
+        applicant_logic = ApplicantIdLogic(applicant_id)
+        return applicant_logic.generate()
