@@ -11,7 +11,12 @@ from raven.contrib.flask import Sentry
 from flasgger import Swagger
 
 from resources.business.healcheck import HealthCheckResource
-from resources.business.applicants import ApplicantResource, ApplicantIdResource, GenerateInfosResource, GenerateInfoResource
+from resources.business.applicants import (
+    ApplicantResource,
+    ApplicantIdResource,
+    GenerateInfosResource,
+    GenerateInfoResource,
+)
 from resources.business.results import ResultResource
 
 

@@ -36,7 +36,11 @@ def check_approve(dob):
         status = Status.failed
     elif int(curent_year) - int(year) == 15 and int(curent_month) < int(month):
         status = Status.failed
-    elif int(curent_year) - int(year) == 15 and int(curent_month) == int(month) and int(curent_day) < int(day):
+    elif (
+        int(curent_year) - int(year) == 15
+        and int(curent_month) == int(month)
+        and int(curent_day) < int(day)
+    ):
         status = Status.failed
     else:
         status = Status.processed
