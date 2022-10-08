@@ -215,6 +215,12 @@ class GenerateInfoResource(Resource):
         """
         Generate info of this applicant
         ---
+        parameters:
+          - in: path
+            name: applicant_id
+            type: string
+            format: uuid
+            required: true
         responses:
           200:
             description: Generate an applicants
