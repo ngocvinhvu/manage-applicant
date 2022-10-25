@@ -48,5 +48,5 @@ python3 manager.py runtask stimulate_script
 
 # Server test
 ### API_URL
-`http://103.107.182.123:5000`
+`103.107.182.123`
 
